@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="layout" onclick="onmousemove()">测试</button>
+  <button  onclick="cancel()">取消</button>
+  <div ></div>
+  <script>
+//    function debounce(func, wait, immediate) {
+//     var timeout, result;
+    
+//     var debounced = function () {
+//         var context = this;
+//         var args = arguments;
+        
+//         if (timeout) clearTimeout(timeout);
+//         if (immediate) {
+//             // 如果已经执行过，不再执行
+//             var callNow = !timeout;
+//             timeout = setTimeout(function(){
+//                 timeout = null;
+//             }, wait)
+//             if (callNow) result = func.apply(context, args)
+//         } else {
+//             timeout = setTimeout(function(){
+//                 func.apply(context, args)
+//             }, wait);
+//         }
+//         return result;
+//     };
+
+//     debounced.cancel = function() {
+//       console.log("te");
+//         clearTimeout(timeout);
+//         timeout = null;
+//     };
+
+//     return debounced;
+// }
+    count=0
+//     var timeout;
+//     function debounce(func, wait) {
+
+//     return function () {
+//         var context = this;
+//         var args = arguments;
+//         clearTimeout(timeout)
+//         timeout = setTimeout(function(){
+//             func.apply(context, args)
+//         }, wait);
+//     }
+// }
+// function cancel(){
+//   console.log(timeout);
+//     clearTimeout(timeout)
+//     timeout=null
+//     console.log("1",timeout);
+// }
+function throttle(func, wait) {
+    var context, args;
+    var previous = 0;
+
+    return function() {
+        var now = +new Date();
+        context = this;
+        args = arguments;
+        if (now - previous > wait) {
+            func.apply(context, args);
+            previous = now;
+        }
+    }
+}
+
+
+var node = document.getElementById('layout')
+function getUserAction(t) {
+   // console.log(this, e)  // 分别打印：node 这个节点 和 MouseEvent
+    node.innerHTML = count++;
+};
+
+
+
+
+onmousemove = throttle(getUserAction, 3000);
+// 取消防抖
+//setUseAction.cancel()
+  </script>
+</body>
+</html>
