@@ -143,14 +143,11 @@ Function.prototype.myBind = function (context) {
     // 或者
     // bindFn.prototype = that.prototype // 但是有修改会被同时改动
     // bindFn.prototype = Object.create(that.prototype || Function.prototype)
-​
-    return bindFn;
+​return bindFn;
 }
-​
-function fnB (...args) {
+​function fnB (...args) {
     console.log('结果👉', this.name, ...args);
 }
-​
-console.log('-------------------------myBind------------------------------');
+​console.log('-------------------------myBind------------------------------');
 fnB() // 直接指向window
 fnB.myBind(object, 10, 20, 30)(40, 50) // bind函数返回的是一个函数，还需要手动执行

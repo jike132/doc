@@ -1,94 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <button id="layout" onclick="onmousemove()">测试</button>
-  <button  onclick="cancel()">取消</button>
-  <div ></div>
-  <script>
-//    function debounce(func, wait, immediate) {
-//     var timeout, result;
-    
-//     var debounced = function () {
-//         var context = this;
-//         var args = arguments;
-        
-//         if (timeout) clearTimeout(timeout);
-//         if (immediate) {
-//             // 如果已经执行过，不再执行
-//             var callNow = !timeout;
-//             timeout = setTimeout(function(){
-//                 timeout = null;
-//             }, wait)
-//             if (callNow) result = func.apply(context, args)
-//         } else {
-//             timeout = setTimeout(function(){
-//                 func.apply(context, args)
-//             }, wait);
-//         }
-//         return result;
-//     };
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="layout" onclick="onmousemove()">测试</button>
+    <button onclick="cancel()">取消</button>
+    <div></div>
+    <script>
+      //    function debounce(func, wait, immediate) {
+      //     var timeout, result;
 
-//     debounced.cancel = function() {
-//       console.log("te");
-//         clearTimeout(timeout);
-//         timeout = null;
-//     };
+      //     var debounced = function () {
+      //         var context = this;
+      //         var args = arguments;
 
-//     return debounced;
-// }
-    count=0
-//     var timeout;
-//     function debounce(func, wait) {
+      //         if (timeout) clearTimeout(timeout);
+      //         if (immediate) {
+      //             // 如果已经执行过，不再执行
+      //             var callNow = !timeout;
+      //             timeout = setTimeout(function(){
+      //                 timeout = null;
+      //             }, wait)
+      //             if (callNow) result = func.apply(context, args)
+      //         } else {
+      //             timeout = setTimeout(function(){
+      //                 func.apply(context, args)
+      //             }, wait);
+      //         }
+      //         return result;
+      //     };
 
-//     return function () {
-//         var context = this;
-//         var args = arguments;
-//         clearTimeout(timeout)
-//         timeout = setTimeout(function(){
-//             func.apply(context, args)
-//         }, wait);
-//     }
-// }
-// function cancel(){
-//   console.log(timeout);
-//     clearTimeout(timeout)
-//     timeout=null
-//     console.log("1",timeout);
-// }
-function throttle(func, wait) {
-    var context, args;
-    var previous = 0;
+      //     debounced.cancel = function() {
+      //       console.log("te");
+      //         clearTimeout(timeout);
+      //         timeout = null;
+      //     };
 
-    return function() {
-        var now = +new Date();
-        context = this;
-        args = arguments;
-        if (now - previous > wait) {
-            func.apply(context, args);
-            previous = now;
+      //     return debounced;
+      // }
+          count=0
+      //     var timeout;
+           function debounce(func, wait,immediate=false) {
+            let timeout=null;
+         
+           return  ()=> {
+           
+              var args = arguments;
+              if(immediate){
+                func.apply(this, args)
+                immediate=false
+              }else{
+               clearTimeout(timeout)
+               timeout = setTimeout(function(){
+                console.log(args)
+                  func.apply(this, args)
+               }, wait);
+              }
+           }
+       }
+      // function cancel(){
+      //   console.log(timeout);
+      //     clearTimeout(timeout)
+      //     timeout=null
+      //     console.log("1",timeout);
+      // }
+      function throttle(func, wait) {
+          var context, args;
+          var previous = 0;
+
+          return function() {
+              var now = +new Date();
+              context = this;
+              args = arguments;
+              if (now - previous > wait) {
+                  func.apply(context, args);
+                  previous = now;
+              }
+          }
+      }
+
+
+      var node = document.getElementById('layout')
+      function getUserAction(t) {
+         // console.log(this, e)  // 分别打印：node 这个节点 和 MouseEvent
+          node.innerHTML = count++;
+      };
+
+      function addFCurry(f) {
+      return curring=(...args)=>{
+        if(args.length < f.length) {
+          return (...args1)=> {
+                  return curring(...args.concat(args1))
+              }
         }
-    }
-}
+        return f.apply(this,args)
+      }
 
 
-var node = document.getElementById('layout')
-function getUserAction(t) {
-   // console.log(this, e)  // 分别打印：node 这个节点 和 MouseEvent
-    node.innerHTML = count++;
-};
+      }
 
+      const add=(a,b,c)=>{return a*b*c}
+      // console.log(addCurry(1)(2,6)(3).toString());
+      console.log(addFCurry(add)(3)(2)(4));
 
-
-
-onmousemove = throttle(getUserAction, 3000);
-// 取消防抖
-//setUseAction.cancel()
-  </script>
-</body>
+      onmousemove =debounce(getUserAction, 1000,true);
+      // 取消防抖
+      //setUseAction.cancel()
+    </script>
+  </body>
 </html>

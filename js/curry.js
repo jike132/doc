@@ -11,18 +11,19 @@
   }
 
 //升级
-function addCurry(f,...args) {
-  let arr = [...arguments]
-  let fn = function () {
-      if(arguments.length === 0) {
-    return arr.reduce((a, b) => a + b)
-      } else {
-          arr.push(...arguments)
-          return fn
+function addFCurry(f) {
+    return curring=(...args)=>{
+      if(args.length < f.length) {
+        //处理参数
+        return (...args1)=> {
+                return curring(...args.concat(args1))
+            }
       }
-  }
-  return fn
-}
+      return f.apply(this,args)
+    }
+      
+      
+    }
 // 进一步升级
 function addCurry(f) {
   let arr = [...arguments]
@@ -55,10 +56,12 @@ function createCurry(fn){
     var slice = Array.prototype.slice,
         stored_args = slice.call(arguments,1);
     return function () {
+
         let new_args = slice.call(arguments),
             args = stored_args.concat(new_args);
         return fn.apply(null,args);
     }
 }
-console.log(addCurry(1)(2,6)(3).toString());
-
+const add=(a,b,c)=>{return a+b+c}
+// console.log(addCurry(1)(2,6)(3).toString());
+console.log(createCurry(add,1)(2,3));
