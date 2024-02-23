@@ -151,3 +151,46 @@ Function.prototype.myBind = function (context) {
 ​console.log('-------------------------myBind------------------------------');
 fnB() // 直接指向window
 fnB.myBind(object, 10, 20, 30)(40, 50) // bind函数返回的是一个函数，还需要手动执行
+
+
+Function.prototype.myCall=function(context,...args){
+     context=context||window
+    context["t"]=this
+    let res=context["t"](...args)
+    delete context["t"];
+    return res;
+
+}
+Function.prototype.myBind1=function(...args){
+   let [context,...other]=args
+   const Fn=(...params)=>{
+    console.log(new.target);
+    context=new.target?this:Object(context)
+    return this.call(context,...params)
+   }
+if(this.prototype)Fn.prototype=this.prototype
+return Fn
+}
+function a(a,b){
+    console.log(this);
+    return b*a*2
+}
+let  o={b:"2"}
+
+console.log(a.myBind1(o)(2,3)); 
+
+function af(a,b){
+    return b*a*2
+}
+function memory(fn){
+    const cache={}
+    return function(...args){
+        const key=JSON.stringify(args)
+        if(cache[key])return cache[key]
+        console.log(cache);
+        return cache[key]=fn.apply(fn,args)
+    }
+}
+let d=memory(af)
+console.log(d(2,3),d(2,4));
+//是否存在循环引用
