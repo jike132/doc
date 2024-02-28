@@ -7,3 +7,4 @@
 #### 6.手写apply、call、bind
 #### 7.手写new
 #### 8.手写instanceof
+#### https://cloud.tencent.com/developer/article/2026672

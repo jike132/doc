@@ -8,7 +8,8 @@
   </head>
   <body>
     <button id="layout" onclick="onmousemove()">测试</button>
-    <button onclick="cancel()">取消</button>
+    <button onclick="debounce(()=>{add(1,2,3)},1000,false)">取消</button>
+    <img src="https://blog.csdn.net/xv7777666/article/details/130010807"/>
     <div></div>
     <script>
       //    function debounce(func, wait, immediate) {
@@ -71,15 +72,20 @@
       function throttle(func, wait) {
           var context, args;
           var previous = 0;
-
+let flag=false;
           return function() {
-              var now = +new Date();
+              //var now = +new Date();
               context = this;
               args = arguments;
-              if (now - previous > wait) {
-                  func.apply(context, args);
-                  previous = now;
-              }
+              //if (now - previous > wait) {
+                if(!flag){
+                  func.apply(context, args)
+                  flag=true;
+                  setTimeout(()=>flag=false,wait)
+                }
+                  ;
+                  //previous = now;
+              //}
           }
       }
 
@@ -107,7 +113,7 @@
       // console.log(addCurry(1)(2,6)(3).toString());
       console.log(addFCurry(add)(3)(2)(4));
 
-      onmousemove =debounce(getUserAction, 1000,true);
+      onmousemove =throttle(getUserAction, 1000);
       // 取消防抖
       //setUseAction.cancel()
     </script>
